@@ -1,0 +1,15 @@
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class RecipeSearch {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        RecipeBook book = new RecipeBook();
+        UI ui = new UI(book,scanner);
+        ui.start();
+        
+    }
+
+}

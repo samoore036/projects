@@ -1,0 +1,38 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ *
+ * @author mooshahe
+ */
+
+import java.util.ArrayList;
+
+public class Ingredients {
+    ArrayList<String> list;
+    
+    public Ingredients() {
+        this.list = new ArrayList<>();
+    }
+    
+    public void add(String ingredient) {
+        this.list.add(ingredient);
+    }
+    
+    public String toString() {
+        int i = 0;
+        for (String ingredient : this.list) {
+            if (i == this.list.size()-1) {
+                System.out.print(ingredient);
+            } else if (i < this.list.size()-1) {
+                System.out.print(ingredient + ", ");
+                i++;
+            }
+            
+        }
+        return "";
+    }
+}

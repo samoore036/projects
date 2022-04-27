@@ -1,0 +1,42 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ *
+ * @author mooshahe
+ */
+import java.util.ArrayList;
+
+public class RecipeBook {
+    public ArrayList<Recipe> book;
+    
+    public RecipeBook() {
+        this.book = new ArrayList<>();
+    }
+    
+    public int getSize() {
+        return this.book.size();
+    }
+    
+    public Recipe getIndex(int number) {
+        return this.book.get(number);
+    }
+    
+    public void add(Recipe recipe) {
+        this.book.add(recipe);
+    }
+    
+    public void test() {
+        System.out.println("test");
+    }
+    
+    public String toString() {
+        for (Recipe recipe : this.book) {
+            System.out.println(recipe);
+        }
+        return "";
+    }
+}

@@ -1,0 +1,107 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ *
+ * @author mooshahe
+ */
+import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+public class UI {
+    private RecipeBook book;
+    private Scanner scanner;
+    private Ingredients ingredient;
+    private Recipe recipe;
+    
+    public UI(RecipeBook book, Scanner scanner) {
+        this.book = book;
+        this.scanner = scanner;
+    }
+    
+    public void start() {
+        while (true) {
+            System.out.println("Commands:" + "\n" +
+                            "Add - adds a new recipe" + "\n" +
+                            "Search - searches for a recipe" + "\n" +
+                            "List - lists all current recipes" + "\n" +
+                            "end - ends the program") ;
+            String command = scanner.nextLine();
+            if (command.equalsIgnoreCase("add")) {
+                add();
+            }
+            if (command.equalsIgnoreCase("search")) {
+                search();
+            }
+            if (command.equalsIgnoreCase("list")) {
+                list();
+            }
+            if (command.equalsIgnoreCase("end")) {
+                System.out.println("Bon appetit!");
+                break;
+            }
+        }
+    }
+    
+    public void add() {
+        while (true) {
+            System.out.println("Name of recipe:");
+            String name = scanner.nextLine();
+            if (name.equalsIgnoreCase("end")) {
+                break;
+            }
+            System.out.println("How many minutes does it take to cook?");
+            int time = Integer.valueOf(scanner.nextLine());
+            System.out.println("Enter as many ingredients as you'd like, separated by a comma");
+            String ingredients = scanner.nextLine();
+            String[] allIngredients = ingredients.split(",");
+            Ingredients ingredient = new Ingredients();
+            for (int i = 0; i < allIngredients.length; i++) {
+                ingredient.add(allIngredients[i]);
+            }
+            this.book.add(new Recipe(name,time,ingredient));
+        }
+        return;
+    }
+    
+    public void search() {
+        System.out.println("Would you like to search by name, time, or ingredient?");
+        String answer = scanner.nextLine();
+        if (answer.equalsIgnoreCase("name")) {
+            System.out.println("Enter the name of the recipe:");
+            String name = scanner.nextLine();
+            for (int i = 0; i < this.book.getSize(); i++) {
+                if (this.book.getIndex(i).getName().equals(name)) {
+                    System.out.println(this.book.getIndex(i));
+                }
+            }
+        }
+        
+        if (answer.equalsIgnoreCase("time")) {
+            System.out.println("Enter in minutes the maximum time the recipe would take:");
+            int time = Integer.valueOf(scanner.nextLine());
+            for (int i = 0; i < this.book.getSize(); i++) {
+                if (this.book.getIndex(i).getTime() <= time) {
+                    System.out.println(this.book.getIndex(i));
+                }
+            }
+        }
+        if (answer.equalsIgnoreCase("ingredient")) {
+            System.out.println("Enter an ingredient you would like to use today:");
+            String ingredientUsed = scanner.nextLine();
+            for (int i = 0; i < this.book.getSize(); i++) {
+                if (this.book.getIndex(i).getIngredients().contains(ingredientUsed)) {
+                    System.out.println(this.book.getIndex(i));
+                }
+            }
+        }
+    }
+    
+    public void list() {
+        System.out.println(this.book);
+    }
+}

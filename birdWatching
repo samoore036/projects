@@ -1,0 +1,63 @@
+
+import java.util.Scanner;
+import java.util.ArrayList;
+
+public class mainProgram {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        ArrayList<Bird> birdCollection = new ArrayList();
+        
+        while (true) {
+            System.out.println("?");
+            String input = scanner.nextLine();
+            if (input.equalsIgnoreCase("add")) {
+                System.out.println("Name:");
+                String name = scanner.nextLine();
+                System.out.println("Name in Latin:");
+                String latinName = scanner.nextLine();
+                birdCollection.add(new Bird(name,latinName));
+            }
+            
+            if (input.equalsIgnoreCase("observation")) {
+                System.out.println("Bird?");
+                String bird = scanner.nextLine();
+                for (Bird birds : birdCollection) {
+                    if (birdCollection.contains(bird)) {
+                        if (birds.getName().equalsIgnoreCase(bird)) {
+                            birds.count();
+                            break;
+                        } 
+                    }
+                System.out.println("Not a bird");
+                    
+                }
+                
+               
+            }
+            if (input.equalsIgnoreCase("all")) {
+                for (Bird birds : birdCollection) {
+                    System.out.println(birds.toString());
+                }
+            }
+            if (input.equalsIgnoreCase("one")) {
+                System.out.println("Bird?");
+                String bird = scanner.nextLine();
+                for (Bird birds : birdCollection) {
+                    if (birds.name.equals(bird)) {
+                        System.out.println(birds.toString());
+                    }
+                }
+            }
+            if (input.equalsIgnoreCase("quit")) {
+                break;
+            }
+        }
+        
+    }
+    
+    
+    
+}
+
+

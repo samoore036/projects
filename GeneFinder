@@ -1,0 +1,144 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ *
+ * @author mooshahe
+ */
+public class Part1 {
+    
+    public static String findSimpleGene(String dna) {
+        int startIndex = dna.indexOf("ATG");
+        if (startIndex == -1) {
+            return "Not a valid gene";
+        }
+        int stopIndex = dna.indexOf("TAA",startIndex+3);
+        if (stopIndex == -1) {
+            return "Not a valid gene";
+        }
+        if ((startIndex-stopIndex) % 3 == 0) {
+            return dna.substring(startIndex,stopIndex+3);
+        }
+        return "Not a valid gene";
+    }
+    
+    public static String findSimpleGene(String dna, String startCodon, String stopCodon) {
+        int start = dna.indexOf(startCodon);
+        int stop = dna.indexOf(stopCodon+3);
+        if (start == -1 || stop == -1) { //evaluates the startCodon and stopCodon input
+            start = dna.indexOf(startCodon.toLowerCase()); //evaluates if it can find the lowercase version of startCodon
+            stop = dna.indexOf(stopCodon.toLowerCase(),start); //evalutes if it can find the lowercase version of stopCodon AFTER the startCodon
+            if (start == -1 || stop == -1) { //evalutes again if the indices aren't found 
+                start = dna.indexOf(startCodon.toUpperCase()); //in case a lowercase startCodon or stopCodon is entered first 
+                stop = dna.indexOf(stopCodon.toUpperCase(),start);
+                if (start == -1 || stop == -1) {
+                    return "Not a valid gene";
+                }
+            }
+        } 
+        String gene = dna.substring(start,stop+3);
+        return gene;
+    }
+    
+    public static int findStopCodon(String dna, int startIndex, String stopCodon) {
+        int currIndex = dna.indexOf(stopCodon,startIndex);
+        while (currIndex != -1) {
+            if ((currIndex - startIndex) % 3 == 0) {
+                return currIndex;
+            } else {
+                return -1;
+            }
+        }
+        return -1;
+    }
+    
+    public static String findGene(String dna, int startIndex) {
+        String s = "";
+        startIndex = dna.indexOf("ATG",startIndex);
+        if (startIndex == -1) {
+            return s;
+        }
+        int taa = findStopCodon(dna,startIndex,"TAA");
+        int tag = findStopCodon(dna,startIndex,"TAG");
+        int tga = findStopCodon(dna,startIndex,"TGA");
+        if (taa == -1 && tag == -1 && tga == -1) {
+            return s;
+        }
+        if (taa != 1 && tag == -1 && tga == -1) {
+            if (taa < tag && taa < tga) {
+                s = dna.substring(startIndex,taa+3);
+                return s;
+            }
+        } else if (taa != -1 && tag != -1 && tga == -1) {
+            if (taa < tag) {
+                s = dna.substring(startIndex,taa+3);
+                return s;
+            } else if (tag < taa) {
+                s = dna.substring(startIndex,tag+3);
+            }
+        } else if (taa != -1 && tag == -1 && tga != -1) {
+            if (taa < tga) {
+                s = dna.substring(startIndex,taa+3);
+                return s;
+            } else if (tga < taa) {
+                s = dna.substring(startIndex,tga+3);
+                return s;
+            }
+        } else if (taa == -1 && tag != -1 && tga != -1) {
+            if (tag < tga) {
+                s = dna.substring(startIndex,tag+3);
+                return s;
+            } else if (tga < tag) {
+                s = dna.substring(startIndex,tga+3);
+                return s;
+            }
+        } else if (taa == -1 && tag != -1 && tga == -1) {
+            s = dna.substring(startIndex,tag+3);
+            return s;
+        } else if (taa == -1 && tag == -1 && tga != -1) {
+            s = dna.substring(startIndex,tga+3);
+            return s;       
+        }
+        return s;
+    }
+    
+    public static void printAllGenes(String dna) {
+        int startIndex = dna.indexOf("ATG");//searches for FIRST instance of ATG
+        while (startIndex != -1) {//as long as the method can find a new instance of ATG loop will not break
+            String gene = findGene(dna,startIndex);
+            if (gene.isEmpty()) { //breaks out of loop is no valid gene is found
+                break;
+            }
+            System.out.println(gene); //prints the gene found from findGene
+            startIndex = dna.indexOf(gene,startIndex)+gene.length();//startIndex now starts from where it found the gene, starting from the startIndex 
+        }                                                           //plus that gene's length so it will start at the end of the gene found
+        System.out.println("No more valid genes");
+    }
+   
+}
+
+public class Sandbox {
+    
+    public static void main(String[] args) {
+        String one = "AAGCGTAATATGGT";
+//        System.out.println(Part1.findSimpleGene(one));
+//        System.out.println(Part1.findStopCodon(one, 0, "TAA"));
+        String two = "CGATGGTTTG";
+
+        String three = "ATCCTATCTTCGGCTGCTCTATATGGT";
+
+        String four = "TTATAAATGKAOAJWTAAJQI";
+
+        String four1 = four.toLowerCase();
+
+        String five = "TTATAAATGKAOAJTAAJQI";
+//                          6           18         29          40
+        String six = "ASODIJATGTGATAAJDMATGIDJTGAOIATGJFIGTAJFATAGTAA";
+        Part1.printAllGenes(six);
+//        findAbc("abcdkfjsksioehgjfhsdjfhksdfhuwabcabcajfieowj");
+       
+    }    
+       

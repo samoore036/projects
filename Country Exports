@@ -1,0 +1,192 @@
+public class Exports {
+    public static void main(String[] args) {
+        CountryDatabase db = new CountryDatabase();
+        Country Afghanistan = new Country("Afghanistan");
+        parseString("opium, fruits and nuts, handwoven carpets, wool, cotton, hides and pelts, precious and semi-precious gems, $2785000000",Afghanistan);
+        db.add(Afghanistan);
+        Country Albania = new Country("Albania");
+        parseString("textiles, footwear, asphalt, metals and metallic ores, crude oil, vegetables, fruits, tobacco, $2471000000",Albania);
+        db.add(Albania);
+        Country Algeria = new Country("Algeria");
+        parseString("Albania, textiles, footwear, asphalt, metals and metallic ores, crude oil, vegetables, fruits, tobacco, $2471000000",Algeria);
+        db.add(Algeria);
+        Country Germany = new Country("Germany");
+        parseString("motor vehicles, machinery, chemicals, computer and electronic products, electrical equipment, pharmaceuticals, metals, transport equipment, foodstuffs, textiles, rubber and plastic products,$1547000000000",Germany);
+        db.add(Germany);
+        Country Ghana = new Country("Ghana");
+        parseString("oil, gold, cocoa, timber, tuna, bauxite, aluminum, manganese ore, diamonds, horticultural products,$13530000000",Ghana);
+        db.add(Ghana);
+        Country Macedonia = new Country("Macedonia");
+        parseString("tobcco, textiles, $3421000000",Macedonia);
+        db.add(Macedonia);
+        Country Madagascar = new Country("Madagascar");
+        parseString("Madagascar, coffee, vanilla, shellfish, $86480000",Madagascar);
+        db.add(Madagascar);
+        Country Malawi = new Country("Malawi");
+        parseString("tea, sugar, cotton, coffee, $1332000000",Malawi);
+        db.add(Malawi);
+        Country Malaysia = new Country("Malaysia");
+        parseString("semiconductors, wood, 231300000000",Malaysia);
+        db.add(Malaysia);
+        Country Namibia = new Country("Namibia");
+        parseString("diamonds, copper, gold, zinc, lead, 4597000000",Namibia);
+        db.add(Namibia);
+        Country Peru = new Country("Peru");
+        parseString("copper, gold, lead, zinc, tin, coffee, 36430000000",Peru);
+        db.add(Peru);
+        Country Rwanda = new Country("Rwanda");
+        parseString("coffee, tea, hides, tin ore, 720000000",Rwanda);
+        db.add(Rwanda);
+        Country SouthAfrica = new Country("South Africa");
+        parseString("gold, diamonds, platinum, 97900000000", SouthAfrica);
+        db.add(SouthAfrica);
+        Country UAE = new Country("United Arab Emirates");
+        parseString("crude oil 45%, natural gas, reexports, dried fish, dates (2012 est.),$40470000000",UAE);
+        db.add(UAE);
+        Country UK = new Country("United Kingdom");
+        parseString("manufactured goods, fuels, chemicals, food, beverages, tobacco, $503400000000",UK);
+        db.add(UK);
+        
+        db.listExportersTwoProducts("gold", "diamonds");
+        System.out.println(db.numberOfExporters("gold"));
+        db.bigExporters(70000000);
+
+    
+      
+
+
+        }
+    public static void parseString(String string, Country country) {
+        String[] exports = string.split(",");
+        for (int i = 0; i < exports.length-1; i++) {
+            country.addExport(exports[i]);
+        }
+        String value = exports[exports.length-1];//grabs the number value which is always last 
+        String trimmed = value.substring(2,value.length()-1);//trims the dollar sign off of the number value
+        Long exportValue = Long.valueOf(trimmed);
+        country.setExportValue(exportValue);
+    }
+
+}
+
+
+import java.util.ArrayList;
+
+public class Export {
+    private ArrayList<String> exportList;
+    
+    public Export() {
+        this.exportList = new ArrayList<>();
+    }
+    
+    public void add (String export) {
+        this.exportList.add(export);
+    }
+    
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        int i = 0;
+        for (String export : this.exportList) {
+            if (i == this.exportList.size()-1) {
+                sb.append(export);
+                break;
+            }
+            i++;
+            sb.append(export + ",");
+        }
+        return sb.toString();
+    }
+}
+
+public class Country {
+    private String name;
+    private Export exports;
+    private long exportValue;
+    
+    public Country(String name) {
+        this.name = name;
+        this.exports = new Export();
+        this.exportValue = 0;
+    }
+    
+    public String getName() {
+        return this.name;
+    }
+    
+    public void setExportValue(Long number) {
+        this.exportValue = number;
+    }
+    
+    public long getExportValue() {
+        return this.exportValue;
+    }
+    
+    public void addExport(String export) {
+        this.exports.add(export);
+    }
+    
+    public String getExports() {
+        return this.exports.toString();
+    }
+    
+    @Override
+    public String toString() {
+        return this.name + ": " + this.exports + ": $" + this.exportValue;
+    }
+}
+
+import java.util.ArrayList;
+
+public class CountryDatabase {
+    private ArrayList<Country> db;
+    
+    public CountryDatabase() {
+        this.db = new ArrayList<>();
+    }
+    
+    public void add(Country country) {
+        this.db.add(country);
+    }
+    
+    public void allCountryInfo() {
+        for (Country country : this.db) {
+            System.out.println(country);
+        }
+    }
+    
+    public void listExportersTwoProducts(String exportItem1, String exportItem2) {
+        for (int i = 0; i < this.db.size(); i++) {
+            if (this.db.get(i).getExports().contains(exportItem1) && this.db.get(i).getExports().contains(exportItem2)) {
+                System.out.println(this.db.get(i).getName());
+            }
+        }
+    }
+    
+    public int numberOfExporters(String exportItem) {
+        int count = 0;
+        for (int i = 0; i < this.db.size(); i++) {
+            if (this.db.get(i).getExports().contains(exportItem)) {
+                count++;
+            }
+        }
+        return count;
+    }
+    
+    public void bigExporters(long amount) {
+        for (int i = 0; i < this.db.size(); i++) {
+            if (this.db.get(i).getExportValue() >= amount) {
+                System.out.println(this.db.get(i).getName() + " $" + this.db.get(i).getExportValue());
+            }
+        }
+    }
+    
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (Country country : this.db) {
+            sb.append(country.toString());
+        }
+        return sb.toString();
+    }
+}

@@ -1,0 +1,46 @@
+public enum DayOfWeek {
+    MONDAY(0),
+    TUESDAY(1),
+    WEDNESDAY(2),
+    THURSDAY(3),
+    FRIDAY(4),
+    SATURDAY(5),
+    SUNDAY(6);
+    
+    private int ordering;
+    
+    private DayOfWeek(int ordering) {
+        this.ordering = ordering;
+    }
+    
+    public DayOfWeek plus(int numberOfDays) {
+        int newOrdering = 0;
+        if (numberOfDays >= 0) {
+            newOrdering = (this.ordering + numberOfDays) % 7;
+        } else {
+            throw new IllegalArgumentException("if you want to add days, please input a positive number!");
+        }
+        for (DayOfWeek day : DayOfWeek.values()) {
+            if (day.ordering == newOrdering) {
+                return day;
+            }
+        }
+        throw new IllegalArgumentException("Could not find a day for ordering value: " + newOrdering);
+    }
+    
+    public String toString() {
+        return name().substring(0,1) + name().substring(1,name().length()).toLowerCase();
+    }
+}
+
+public class Sandbox {
+    
+    public static void main(String[] args) {
+        DayOfWeek day1 = DayOfWeek.MONDAY;
+        System.out.println(day1);
+        System.out.println(day1.plus(88));
+        System.out.println(day1.plus(4));
+        System.out.println(day1.plus(7));
+        System.out.println(day1.plus(-1));
+    }       
+}

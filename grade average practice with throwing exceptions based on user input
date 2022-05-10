@@ -1,0 +1,95 @@
+import java.util.Scanner;
+
+public class main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            System.out.println("Enter 'new student' to enter a new student's name");
+            String input = scanner.nextLine();
+            if (input.equalsIgnoreCase("new student")) {
+                System.out.println("Enter student's name:");
+                String name = scanner.nextLine();
+                Student newStudent = new Student(name);
+                System.out.println("Enter grades for " + name + "(enter stop to stop):");
+                while (true) {
+                    String gradeInput = scanner.nextLine();
+                    if (gradeInput.equalsIgnoreCase("stop")) {
+                        if (newStudent.numberOfGrades() <= 1) {
+                            throw new IllegalArgumentException("The user must enter more than one grade");
+                        }
+                        break;
+                    }
+                    double grade = Double.valueOf(gradeInput);
+                    newStudent.add(grade);
+                }
+                System.out.println(newStudent.getName() + "'s average score is: " + newStudent.avgGrades());
+            }
+        }
+        
+        
+    }
+}
+
+
+import java.util.ArrayList;
+
+public class Student {
+    private String name;
+    private ArrayList<Double> grades;
+    
+    public Student(String name) {
+        this.name = name;
+        this.grades = new ArrayList();
+    }
+    
+    public void add(double grade) {
+        if (grade <= 0.0 || grade > 4.0) {
+            throw new IllegalArgumentException("Grade must be between 0.0 and 4.0");
+        } else {
+            this.grades.add(grade);
+        }
+    }
+    
+    public String getName() {
+        return this.name;
+    }
+    
+    public int getNumberOfCourses() {
+        return this.grades.size()-1;
+    }
+    
+    public void getGrades() {
+        for (double grade : this.grades) {
+            System.out.println(grade);
+        }
+    }
+    
+    public int numberOfGrades() {
+        return this.grades.size();
+    }
+    
+    public double smallestGrade() {
+        double smallest = this.grades.get(0);
+        for (double grade : this.grades) {
+            if (grade < smallest) {
+                smallest = grade;
+            }
+        }
+        return smallest;
+    }
+    
+    public double avgGrades() {
+        double sum = 0;
+        for (double grade : this.grades) {
+            sum += grade;
+        }
+        sum -= this.smallestGrade();
+        double avg = sum/(this.grades.size()-1);
+        
+        return avg;
+    }
+    
+    public String toString() {
+        return this.name + " has taken " + this.grades.size() + " courses, with grades of: ";
+    }
+}

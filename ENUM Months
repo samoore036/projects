@@ -1,0 +1,138 @@
+public enum DisplayStyle {
+    SHORT,
+    LONG;
+}
+
+public enum Month {
+    JANUARY(0,31,"Jan"),
+    FEBRUARY(1,28,"Feb"),
+    MARCH(2,31,"March"),
+    APRIL(3,30,"April"),
+    MAY(4,31,"May"),
+    JUNE(5,30,"June"),
+    JULY(6,31,"July"),
+    AUGUST(7,31,"Aug"),
+    SEPTEMBER(8,30,"Sept"),
+    OCTOBER(9,31,"Oct"),
+    NOVEMBER(10,30,"Nov"),
+    DECEMBER(11,31,"Dec");
+    
+    private int orderNumber;
+    private int numberOfDays;
+    private String shortVersion;
+    
+    private Month(int orderNumber, int numberOfDays, String shortVersion) {
+        this.orderNumber = orderNumber;
+        this.numberOfDays = numberOfDays;
+        this.shortVersion = shortVersion;
+    }
+    
+    public int getLength() {
+        return this.numberOfDays;
+    }
+    
+    public int getOrder() {
+        return this.orderNumber;
+    }
+    
+    public Month plus(int numberOfMonths) {
+        int newOrder = (this.orderNumber + numberOfMonths) % 12;
+        for (Month m : Month.values()) {
+            if (m.orderNumber == newOrder) {
+                return m;
+            }
+        }
+        throw new IllegalArgumentException("Something went wrong!");
+    }
+    
+    public String getDisplayName(DisplayStyle style) {
+        if (style.equals(style.LONG)) {
+            return this.name().substring(0,1) + this.name().substring(1).toLowerCase();
+        } else {
+            return this.shortVersion;
+        }
+    }
+    
+    public String toString() {
+        return name().substring(0,1) + name().substring(1).toLowerCase();
+    }
+    
+    public class main {
+    public static void main(String[] args)  {
+        Month jan = Month.JANUARY;
+        System.out.println("Testing: " + jan + " plus 6 months.");
+        Month sixMonthsLater = jan.plus(6);
+        if(sixMonthsLater == Month.JULY) {
+            System.out.println("✔ Correct: landed in July");
+        } else {
+            System.out.println("✘ Landed in the wrong month. Should be July, but got: " + sixMonthsLater);
+        }
+        
+        System.out.println("Testing: " + jan + " plus 18 months.");
+        Month eighteenMonthsLater = jan.plus(18);
+        if(eighteenMonthsLater == Month.JULY) {
+            System.out.println("✔ Correct: landed in July");
+        } else {
+            System.out.println("✘ Landed in the wrong month. Should be July, but got: " + eighteenMonthsLater);
+        }
+        
+        Month aug = Month.AUGUST;
+        System.out.println("Testing: " + aug + " plus 7 months.");
+        Month sevenMonthsLater = aug.plus(7);
+        if(sevenMonthsLater == Month.MARCH) {
+            System.out.println("✔ Correct: landed in March");
+        } else {
+            System.out.println("✘ Landed in the wrong month. Should be March, but got: " + sevenMonthsLater);
+        }
+        
+        DisplayStyle shortStyle = DisplayStyle.SHORT;
+        DisplayStyle longStyle = DisplayStyle.LONG;
+        
+        Month june = Month.JUNE;
+        System.out.println("Testing: " + june + ".");
+        String shortJune = june.getDisplayName(shortStyle);
+        String longJune = june.getDisplayName(longStyle);
+        if (shortJune.equals("June") && longJune.equals("June")) {
+            System.out.println("✔ Correct: the short and long display are both: " + longJune);
+        } else {
+            System.out.println("✘ Incorrect display names. Expected Long: June, Short: June. Got Long: "
+                    + longJune + " Short: " + shortJune);
+        }
+        
+        Month may = Month.MAY;
+        System.out.println("Testing: " + may + ".");
+        String shortMay = may.getDisplayName(shortStyle);
+        String longMay = may.getDisplayName(longStyle);
+        if(shortMay.equals("May") && longMay.equals("May")) {
+            System.out.println("✔ Correct: the short and long display are both: " + longMay);
+        } else {
+            System.out.println("✘ Incorrect display names. Expected Long: May, Short: May. Got Long: "
+                    + longMay + " Short: " + shortMay);
+        }
+        
+        Month sept = Month.SEPTEMBER;
+        System.out.println("Testing: " + sept + ".");
+        String shortSept = sept.getDisplayName(shortStyle);
+        String longSept = sept.getDisplayName(longStyle);
+        if(shortSept.equals("Sept") && longSept.equals("September")) {
+            System.out.println("✔ Correct: the short and long display are different. Long: " + longSept
+                    + " Short: " + shortSept);
+        } else {
+            System.out.println("✘ Incorrect display names. Expected Long: September, Short: Sept. Got Long: "
+                    + longSept + " Short: " + shortSept);
+        }
+        
+         Month oct = Month.OCTOBER;
+        System.out.println("Testing: " + oct + ".");
+        String shortOct = oct.getDisplayName(shortStyle);
+        String longOct = oct.getDisplayName(longStyle);
+        if(shortOct.equals("Oct") && longOct.equals("October")) {
+            System.out.println("✔ Correct: the short and long display are different. Long: " + longOct
+                    + " Short: " + shortOct);
+        } else {
+            System.out.println("✘ Incorrect display names. Expected Long: October, Short: Oct. Got Long: "
+                    + longOct + " Short: " + shortOct);
+        } 
+    }
+}
+    

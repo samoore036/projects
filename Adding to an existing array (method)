@@ -1,0 +1,52 @@
+public class Grader {
+    
+    private Student[] students = new Student[0];
+    
+    public void addStudent(Student newStudent) {
+        final Student[] moreStudents = new Student[this.students.length+1];
+        for (int i = 0; i < this.students.length; i++) {
+            moreStudents[i] = this.students[i];
+        }
+        moreStudents[this.students.length] = newStudent;
+        this.students = moreStudents;
+    }
+    
+    public Student getStudent(String id) {
+        Student studentToReturn = null;
+        for (Student s : this.students) {
+            if (s.getId().equals(id)) {
+                studentToReturn = s;
+            }
+        }
+        return studentToReturn;
+    }
+    
+    public LetterGrade getLetterGrade(String id) {
+        double sum = 0.0;
+        int count = 0;
+        Student studentTested = getStudent(id);
+        for (Grade g : studentTested.getGrades()) {
+            sum += g.getPercentScore();
+            count++;
+        }
+        double avg = ((double) sum)/count;
+        LetterGrade avgGrade = null;
+        for (LetterGrade g : LetterGrade.values()) {
+            if (avg >= g.getMinimumPercent()) {
+                avgGrade = g;
+                return avgGrade;
+            }
+        }
+        System.out.println("The average grade: " + avgGrade);
+        return avgGrade;
+    }
+    
+    public void administer(String id, Quiz quiz) {
+        Student studentTested = getStudent(id);
+        Quiz newQuiz = quiz;
+        int numberCorrect = newQuiz.administer();
+        int numberOfQuestions = newQuiz.getNumberOfQuestions();
+        Grade testGrade = new Grade(numberOfQuestions,numberCorrect);
+        studentTested.addGrade(testGrade);
+    }
+}

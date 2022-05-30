@@ -1,0 +1,27 @@
+
+
+public class Checker {
+    public boolean isDayOfWeek(String string) {
+        if (string.matches("mon||tue||wed||thu||fri||sat||sun")) {
+            return true;
+        } else {
+            return false;
+        }
+    }//checks for any of the above abbreviations
+    
+    public boolean allVowels(String string) {
+        if (string.matches("[aeiou]*")) {
+            return true;
+        } else {
+            return false;
+        }
+    }//expression checks if there are only vowels
+    
+    public boolean timeOfDay(String string) {
+        if (string.matches("(?:[01]\\d|2[0123]):(?:[012345]\\d):(?:[012345]\\d)")) {
+            return true;
+        } else {
+            return false;
+        }
+    }//checks 24 time in format 23:59:59
+}
